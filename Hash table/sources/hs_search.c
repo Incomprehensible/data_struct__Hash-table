@@ -6,30 +6,30 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/06 12:23:34 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/10 09:59:59 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_hashtable.h"
 
-extern unsigned int size;
+extern unsigned int g_size;
 
-t_htx   *search_hashkey(char *key, t_htx *node)
+t_htx			*search_hashkey(char *key, t_htx *node)
 {
 	while (node && ft_strcmp(node->key, key))
 		node = node->next;
 	return (node);
 }
 
-unsigned int   hashed_elems(t_htx **hashtable)
+unsigned int	hashed_elems(t_htx **hashtable)
 {
-	unsigned long int   hashed;
-	unsigned long int   i;
-	t_htx               *current;
+	unsigned long int	hashed;
+	unsigned long int	i;
+	t_htx				*current;
 
 	i = 0;
 	hashed = 0;
-	while (i < size)
+	while (i < g_size)
 	{
 		if (hashtable[i])
 		{
@@ -46,7 +46,7 @@ unsigned int   hashed_elems(t_htx **hashtable)
 	return (hashed);
 }
 
-unsigned int    get_hashtb_size(void)
+unsigned int	get_hashtb_size(void)
 {
-	return (size);
+	return (g_size);
 }

@@ -6,24 +6,24 @@
 /*   By: bomanyte <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/19 00:53:18 by bomanyte          #+#    #+#             */
-/*   Updated: 2019/12/06 16:32:11 by bomanyte         ###   ########.fr       */
+/*   Updated: 2019/12/10 09:56:07 by bomanyte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh_hashtable.h"
 
-extern unsigned int size;
+extern unsigned int g_size;
 
-t_htx    **init_hashtb(t_htx **hashtable)
+t_htx	**init_hashtb(t_htx **hashtable)
 {
-	hashfunc = hashfunc ? hashfunc : &djb2_hash_func;
-	hashtable = (t_htx **)ft_memalloc(sizeof(t_htx *) * (size + 1));
+	g_hashfunc = g_hashfunc ? g_hashfunc : &djb2_hash_func;
+	hashtable = (t_htx **)ft_memalloc(sizeof(t_htx *) * (g_size + 1));
 	return (hashtable);
 }
 
-t_htx    *make_new_hash(char *key, char *data)
+t_htx	*make_new_hash(char *key, char *data)
 {
-	t_htx   *hashtable;
+	t_htx	*hashtable;
 
 	hashtable = (t_htx *)ft_memalloc(sizeof(t_htx));
 	hashtable->key = ft_strdup(key);
@@ -32,7 +32,7 @@ t_htx    *make_new_hash(char *key, char *data)
 	return (hashtable);
 }
 
-t_htx   *teleport_data(t_htx *new_tb, t_htx *hashtable)
+t_htx	*teleport_data(t_htx *new_tb, t_htx *hashtable)
 {
 	new_tb = (t_htx *)ft_memalloc(sizeof(t_htx));
 	while (hashtable)
@@ -48,15 +48,15 @@ t_htx   *teleport_data(t_htx *new_tb, t_htx *hashtable)
 	return (new_tb);
 }
 
-t_htx   **split_rotate(t_htx **hashtable)
+t_htx	**split_rotate(t_htx **hashtable)
 {
-	t_htx               **new_tb;
-	unsigned int        i;
+	t_htx				**new_tb;
+	unsigned int		i;
 
 	i = 0;
-	new_tb = (t_htx **)ft_memalloc(sizeof(t_htx *) * (size + 1));
-	i = size / 2;
-	while (i <= size)
+	new_tb = (t_htx **)ft_memalloc(sizeof(t_htx *) * (g_size + 1));
+	i = g_size / 2;
+	while (i <= g_size)
 	{
 		if (hashtable[i])
 			new_tb[i] = teleport_data(new_tb[i], hashtable[i]);
@@ -66,16 +66,16 @@ t_htx   **split_rotate(t_htx **hashtable)
 	return (new_tb);
 }
 
-t_htx   **resize_hashtble(t_htx **hashtable, unsigned int new_size)
+t_htx	**resize_hashtble(t_htx **hashtable, unsigned int new_size)
 {
-	t_htx               **new_tb;
-	unsigned int        i;
+	t_htx				**new_tb;
+	unsigned int		i;
 
 	i = 0;
 	if (new_size >= MAXHASH || new_size + 1 < new_size)
 		return (split_rotate(hashtable));
 	new_tb = (t_htx **)ft_memalloc(sizeof(t_htx *) * (new_size + 1));
-	while (i <= size)
+	while (i <= g_size)
 	{
 		if (hashtable[i])
 			into_new_hash(new_size, hashtable[i], new_tb);
@@ -83,25 +83,3 @@ t_htx   **resize_hashtble(t_htx **hashtable, unsigned int new_size)
 	}
 	return (new_tb);
 }
-
-// t_htx   **resize_hashtble(t_htx **hashtable)
-// {
-// 	t_htx               **new_tb;
-// 	unsigned long int   new_size;
-// 	unsigned long int   i;
-
-// 	i = 0;
-// 	if (size * 2 >= MAXHASH || size * 2 + 1 < size)
-// 		return (split_rotate(hashtable));
-// 	new_size = size * 2;
-// 	new_tb = (t_htx **)ft_memalloc(sizeof(t_htx *) * (new_size + 1));
-// 	while (i <= size)
-// 	{
-// 		if (hashtable[i])
-// 			into_new_hash(new_size, hashtable[i], new_tb);
-// 		++i;
-// 	}
-// 	delete_hashtb(hashtable);
-// 	size = new_size;
-// 	return (new_tb);
-// }
